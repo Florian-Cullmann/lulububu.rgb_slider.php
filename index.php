@@ -1,3 +1,4 @@
+<?php require_once(__DIR__.'/core/db_config.php'); ?>
 <!doctype html>
 <html lang="de">
 <head>
@@ -46,7 +47,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <form action="/" method="POST">
+                    <form action="/_actions.php" method="POST">
                         <div class="mb-3">
                             <label for="insert_name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="insert_name" name="insert_name">
