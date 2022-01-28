@@ -73,15 +73,14 @@ foreach ($colors as $color) {
 
                         <div class="mb-3">
                             <label for="insert_name" class="form-label">Farbe</label>
-                            <input class="form-control" id="demo-input" type="text" value="rgb(0, 0, 0)" />
+                            <input class="form-control" id="demo-input" name="insert_color" type="text" value="rgb(0, 0, 0)" />
                         </div>
                     </form>
-
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
-                    <button type="button" class="btn btn-primary">Speichern</button>
+                    <button type="button" class="btn btn-primary" id="add_color_btn">Speichern</button>
                 </div>
             </div>
         </div>
@@ -115,6 +114,12 @@ foreach ($colors as $color) {
                 }
             });
         }
+
+        $('#add_color_btn').click(function(){
+            var name = $('#demo-input').val();
+            var color = $('#insert_name').val();
+            console.log(color);
+        });
     </script>
 </body>
 </html>
