@@ -42,7 +42,7 @@ class Api {
      * @return bool
      * Adds a color to DB based on its $data
      */
-    public function add_color(array $data):bool {
+    public function add_color(array $data):array {
         if (!isset($data['name'], $data['r'], $data['g'], $data['b'])) {
             http_response_code(400);
             die(json_encode([
@@ -68,10 +68,10 @@ class Api {
             g = '".$this->db->real_escape_string($data['g'])."',
             b = '".$this->db->real_escape_string($data['b'])."'
         ");
-        die(json_encode([
+        return [
             'status' => 'success',
             'inserted_id' => $this->db->insert_id
-        ]));
+        ];
 
     }
 
@@ -80,8 +80,12 @@ class Api {
      * @return bool
      * Deletes a color by $id
      */
-    public function delete_color(int $id):bool {
-
+    public function delete_color(int $id):array {
+        $this->db->query("DELETE FROM colors WHERE id='".$this->db->real_escape_string($id)."'");
+        return [
+            'status' => 'success',
+            'affected_rows' => $this->db->affected_rows
+        ];
     }
 
     /**
@@ -96,6 +100,8 @@ class Api {
         return $colors->fetch_all(MYSQLI_ASSOC);
     }
 }
+
+// handle requests
 $_POST = json_decode(file_get_contents('php://input'), true);
 if (isset($_POST['scope'])) {
     // the scope in post request is set, lets check if everything we need is in the request
