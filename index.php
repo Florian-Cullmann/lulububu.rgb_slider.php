@@ -1,4 +1,26 @@
-<?php require_once(__DIR__.'/core/db_config.php'); ?>
+<?php
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL,"https://lulububu.fcullmann.com/api/");
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_USERPWD, 'lulububu:qYgenu*rJPo_WVuuQDUr2R');
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['scope' => 'get']));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$colors = json_decode(curl_exec($ch));
+curl_close($ch);
+
+$table_output = '';
+foreach ($colors as $color) {
+    $table_output .= '
+        <tr id="'.$color->id.'">
+            <td>'.$color->id.'</td>
+            <td>'.$color->name.'</td>
+            <td style="background-color:rgb('.implode(", ", [$color->r, $color->g, $color->b]).');"></td>
+            <td class="text-end"><a class="btn btn-danger btn-sm" onClick="delete_color('.$color->id.');">x</a></td>
+        </tr>
+    ';
+}
+?>
 <!doctype html>
 <html lang="de">
 <head>
@@ -28,11 +50,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>Coole Farbe</td>
-                <td style="background-color:rgb(80, 120, 0);"></td>
-            </tr>
+            <?= $table_output ?>
         </tbody>
     </table>
 
@@ -82,6 +100,21 @@
                 $('#demo').css('background-color', event.color.toString());
             });
         });
+
+        function delete_color(id) {
+            $.ajax
+            ({
+                type: "POST",
+                url: "api/",
+                dataType: 'json',
+                headers: {"Authorization": "Basic " + btoa('lulububu:qYgenu*rJPo_WVuuQDUr2R')},
+                data: '{ "scope":"delete_color", "id":' + id + ' }',
+                success: function (response){
+                    var row = document.getElementById(id);
+                    row.parentNode.removeChild(row);
+                }
+            });
+        }
     </script>
 </body>
 </html>
