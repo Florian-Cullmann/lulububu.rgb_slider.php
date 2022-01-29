@@ -41,7 +41,7 @@ foreach ($colors as $color) {
         Neuer Eintrag
     </button>
 
-    <table class="table table-hover mt-3">
+    <table id="color_table" class="table table-hover mt-3">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -116,9 +116,33 @@ foreach ($colors as $color) {
         }
 
         $('#add_color_btn').click(function(){
-            var name = $('#demo-input').val();
-            var color = $('#insert_name').val();
-            console.log(color);
+            var name = $('#insert_name').val();
+            var color = $('#demo-input').val();
+            color = color.substring(4, color.length -1).split(', ');
+            $.ajax
+            ({
+                type: "POST",
+                url: "api/",
+                dataType: 'json',
+                headers: {"Authorization": "Basic " + btoa('lulububu:qYgenu*rJPo_WVuuQDUr2R')},
+                data: '{ "scope":"add_color", "data":{"name":"' + name + '", "r":"' + color[0] + '", "g":"' + color[1] + '", "b":"' + color[2] + '"}}',
+                success: function (response){
+                    console.log(response);
+                    console.log(color.join(', '));
+                    var color_table = document.getElementById('color_table');
+                    var row = color_table.insertRow(1);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    var cell4 = row.insertCell(3);
+                    cell1.innerHTML = response.inserted_id;
+                    cell2.innerHTML = name;
+                    cell3.style.backgroundColor = 'rgb(' + color.join(', ') + ')';
+                    cell4.classList.add('text-end');
+                    cell4.innerHTML = '<a class="btn btn-danger btn-sm" onclick="delete_color(' + response.inserted_id + ');">x</a>';
+                    $('#new_modal').modal('hide');
+                }
+            });
         });
     </script>
 </body>

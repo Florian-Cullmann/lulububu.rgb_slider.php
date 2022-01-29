@@ -96,7 +96,7 @@ class Api {
         // best practice: limit this query to n rows
         // not done here since it's a challenge and the task was "get ALL colors"
 
-        $colors = $this->db->query("SELECT * FROM colors");
+        $colors = $this->db->query("SELECT * FROM colors ORDER BY savedate DESC");
         return $colors->fetch_all(MYSQLI_ASSOC);
     }
 }
