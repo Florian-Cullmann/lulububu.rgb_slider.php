@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__.'/../core/db_config.php');
+header('Access-Control-Allow-Origin: *'); #cors
 
 class Api {
     private $db = null;
